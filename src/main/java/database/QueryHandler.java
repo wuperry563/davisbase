@@ -1,8 +1,13 @@
 package database;
 
+import com.sun.deploy.util.StringUtils;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 
@@ -61,9 +66,9 @@ public class QueryHandler {
     }
 
     public static void createQuery(String query) {
-        String[] subs = query.split(" ");
-        if (subs[1].equals("table")) {
-            String tablename = subs[2];
+        ArrayList<String> subs = new ArrayList<>(Arrays.asList(query.split(" ")));
+        if (subs.get(1).equals("table")) {
+            String tablename = subs.get(2);
 
             String[] temp = query.split(tablename);
 
@@ -86,8 +91,29 @@ public class QueryHandler {
             } else {
                 System.out.println("Incorrect input. Please check the readme.txt file to know about the supported commands\n");
             }
-        } else {
+        } else if (subs.get(1).equals("index")){
+            parseCreateIndex(subs, query);
+        }
+        else{
             System.out.println("Incorrect input. Please check the readme.txt file to know about the supported commands\n");
+        }
+    }
+
+    //query: Create index on <table_name> (<column_name>);
+    private static void parseCreateIndex(List<String> subs, String query) {
+        if (!subs.get(2).equals("on") || !query.contains("(")
+                || !query.contains(")") && subs.size() < 4) {
+            System.out.println("Incorrect input. Please check the readme.txt file to know about the supported commands\n");
+            return;
+        }
+
+        try{
+            String tableName = subs.get(3);
+            String index = subs.get(4).substring(1,subs.get(4).length()-1);
+            Commands.createIndex(tableName, index);
+        }
+        catch(Exception e){
+            System.out.println("error");
         }
     }
 

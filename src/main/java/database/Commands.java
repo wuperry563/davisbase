@@ -1,5 +1,6 @@
 package database;
 
+import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.File;
 import java.util.ArrayList;
@@ -16,8 +17,6 @@ public class Commands{
 	{
 			String[] columns = {"table_name"};
 			String[] sample = new String[0];
-			
-			
 			select("data//catalog//davisbase_tables.tbl","davisbase_tables", columns, sample);
 	}
 	public static void drop(String table,String db)
@@ -147,6 +146,25 @@ public class Commands{
 				System.out.println("Error at createTable");
 				e.printStackTrace();
 			}
+	}
+
+
+	public static void createIndex(String tableName, String indexName) {
+		try {
+
+			File catalog = new File("data//" + DavisBase.currentDB + "//" + table);
+
+			catalog.mkdir();
+//			RandomAccessFile createfile = new RandomAccessFile("data//" + DavisBase.currentDB + "//" + table + "//" + table + ".tbl", "rw");
+//			createfile.setLength(pageSize);
+//			createfile.seek(0);
+//			createfile.writeByte(0x0D);
+//			createfile.close();
+//			createfile = new RandomAccessFile("data//catalog//davisbase_tables.tbl", "rw");
+		}catch(IOException e){
+			System.out.println("Unable to create index");
+		}
+
 	}
 	public static void update(String table, String[] set, String[] cmp)
 	{
@@ -306,8 +324,6 @@ public class Commands{
 
 	public static void initializeDataStore() 
 	{
-
-			
 			try {
 				File catalog = new File("data//catalog");
 				
@@ -324,7 +340,6 @@ public class Commands{
 				System.out.println("Unable to create catalog directory :"+se);
 				
 			}
-
 			try {
 				davisbaseTablesCatalog = new RandomAccessFile("data//catalog//davisbase_tables.tbl", "rw");
 				davisbaseTablesCatalog.setLength(pageSize);
