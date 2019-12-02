@@ -152,15 +152,17 @@ public class Commands{
 	public static void createIndex(String tableName, String indexName) {
 		try {
 
-			File catalog = new File("data//" + DavisBase.currentDB + "//" + table);
-
-			catalog.mkdir();
-//			RandomAccessFile createfile = new RandomAccessFile("data//" + DavisBase.currentDB + "//" + table + "//" + table + ".tbl", "rw");
-//			createfile.setLength(pageSize);
-//			createfile.seek(0);
-//			createfile.writeByte(0x0D);
-//			createfile.close();
-//			createfile = new RandomAccessFile("data//catalog//davisbase_tables.tbl", "rw");
+//			File catalog = new File("data//" + DavisBase.currentDB + "//" + table);
+//
+//			catalog.mkdir();
+			RandomAccessFile createfile = new RandomAccessFile("data//" + DavisBase.currentDB + "//"+ tableName +"//" + tableName + "_" + indexName
+					+ ".ndx", "rw");
+			createfile.setLength(pageSize);
+			createfile.seek(0);
+			createfile.writeByte(0x0D);
+			IndexFile index = new IndexFile(createfile);
+			index.add("123", "bob");
+			createfile.close();
 		}catch(IOException e){
 			System.out.println("Unable to create index");
 		}
